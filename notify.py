@@ -44,9 +44,9 @@ The message MUST follow this exact format:
 
 *מאת:* {pusher_name}
 
-*השינויים שבוצעו*
+*השינויים שבוצעו:*
 -{repo_name}-
--[Explain the changes here in simple, clear Hebrew. Translate technical terms into simple concepts so anyone can understand.]
+-[Explain the changes here in simple, clear everyday Hebrew. Translate technical terms into simple concepts so anyone can understand.]
 
 *קבצים ששונו/נוספו:*
 -[List the changed/added files here. If there are none, write "אין" (None).]
@@ -58,7 +58,7 @@ The message MUST follow this exact format:
 CRITICAL RULES:
 1. GREETING & PUSHER TERMINOLOGY: Always state that "{pusher_name} ביצע פוש". Do NOT use the words "דחף" or "לדחוף" anywhere in the message. Always use the phrasing "ביצע פוש".
 2. NO HAND EMOJIS: Do NOT use any hand emojis (such as 👋, 🖐️, ✋, ✍️, 👉, 👈, 👇, 👆, etc.) anywhere in the message.
-3. EXPLAIN ONLY IN HEBREW: Do not use technical English jargon (like "refactor", "bugfix", "endpoint", "array") in the explanation. Translate them or explain them in simple Hebrew so that ANYONE (even a non-technical person) can easily understand what change was made.
+3. EXPLAIN ONLY IN HEBREW: Absolutely do NOT use English technical terms (like "refactor", "bugfix", "endpoint", "array", "workflow", "prompt") in your explanation. Always translate them into everyday Hebrew or explain them in simple Hebrew so that ANYONE (even a non-technical person) can easily understand what changes happened in this push.
 4. Keep the message concise (max 1000 characters) to ensure readability on a phone screen.
 
 Here are the details of the push:
@@ -234,7 +234,7 @@ def main():
             f"היי חברים כאן אנדי!\n"
             f"🔔 *עדכון חדש בגיטהאב!*\n\n"
             f"*מאת:* {pusher_name}\n\n"
-            f"*השינויים שבוצעו*\n"
+            f"*השינויים שבוצעו:*\n"
             f"-{repo_name}-\n"
             f"{commits_info}\n"
             f"*קבצים ששונו/נוספו:*\n"
