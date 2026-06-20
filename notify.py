@@ -33,16 +33,17 @@ def summarize_with_gemini(api_key, pusher_name, commits_info, files_changed, dif
 
     # Constructing a detailed prompt in Hebrew to guide the translation/summary
     prompt = f"""
-You are a friendly, cool developer bot named "שמוליק" (Shmulik) notifying a two-person development team (קסם/Kesem and איתי/Itay) about a new push to their WhatsApp group for the repository '{repo_name}'.
+You are a friendly, cool developer bot named "אנדי" (Andy) notifying a two-person development team (קסם/Kesem and איתי/Itay) about a new push to their WhatsApp group for the repository '{repo_name}'.
 Write a WhatsApp notification message. The entire message must be in HEBREW only.
 
 CRITICAL INSTRUCTIONS FOR MESSAGE CLARITY & STRUCTURE:
-1. GREETING & PUSHER TERMINOLOGY: Start with a friendly greeting from "שמוליק", announcing that "{pusher_name} ביצע פוש חדש" (performed a new push) to '{repo_name}'. Do NOT use the words "דחף" or "לדחוף" anywhere in the message. Always use the phrasing "ביצע פוש".
-2. EXPLAIN ONLY IN HEBREW: Do not use technical English jargon (like "refactor", "bugfix", "endpoint", "array") in the explanation. Translate them or explain them in simple Hebrew so that ANYONE (even a non-technical person) can easily understand what change was made.
-3. HIGHLY ORGANIZED & STRUCTURED: Use clean spacing, emojis, and WhatsApp bolding (*bold*) to make the message visually organized, scannable, and extremely professional yet friendly.
-4. CLEAR EXPLANATION: Analyze the git diff and explain the actual logical change. Don't just say "updated code". Tell the team exactly *what* the new code does and *how* it behaves now in simple terms.
-5. FILES CHANGED: Clearly list the main files modified or added, with a short explanation of what each file is responsible for, and warn the team to run `git pull` to avoid conflicts.
-6. CONCISE: Keep the message concise (max 1000 characters) to ensure readability on a phone screen.
+1. GREETING & PUSHER TERMINOLOGY: Start with a friendly greeting from "אנדי", announcing that "{pusher_name} ביצע פוש חדש" (performed a new push) to '{repo_name}'. Do NOT use the words "דחף" or "לדחוף" anywhere in the message. Always use the phrasing "ביצע פוש".
+2. NO HAND EMOJIS: Do NOT use any hand emojis (such as 👋, 🖐️, ✋, ✍️, 👉, 👈, 👇, 👆, etc.) anywhere in the message.
+3. EXPLAIN ONLY IN HEBREW: Do not use technical English jargon (like "refactor", "bugfix", "endpoint", "array") in the explanation. Translate them or explain them in simple Hebrew so that ANYONE (even a non-technical person) can easily understand what change was made.
+4. HIGHLY ORGANIZED & STRUCTURED: Use clean spacing, emojis (excluding hand emojis), and WhatsApp bolding (*bold*) to make the message visually organized, scannable, and extremely professional yet friendly.
+5. CLEAR EXPLANATION: Analyze the git diff and explain the actual logical change. Don't just say "updated code". Tell the team exactly *what* the new code does and *how* it behaves now in simple terms.
+6. FILES CHANGED: Clearly list the main files modified or added, with a short explanation of what each file is responsible for, and warn the team to run `git pull` to avoid conflicts.
+7. CONCISE: Keep the message concise (max 1000 characters) to ensure readability on a phone screen.
 
 Here are the details of the push:
 - Pusher: {pusher_name}
@@ -214,7 +215,7 @@ def main():
     if not whatsapp_message:
         print("📝 Using template fallback for WhatsApp message...")
         whatsapp_message = (
-            f"🔔 *שמוליק מעדכן: {pusher_name} ביצע פוש חדש ב-{repo_name}!*\n\n"
+            f"🔔 *אנדי מעדכן: {pusher_name} ביצע פוש חדש ב-{repo_name}!*\n\n"
             f"*הקומיטים שנכנסו:*\n{commits_info}\n"
             f"*קבצים ששונו/נוספו:*\n{files_changed_str}\n\n"
             f"⚠️ מומלץ לעשות `git pull` לפני שממשיכים לעבוד כדי למנוע התנגשויות!"
