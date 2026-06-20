@@ -34,28 +34,26 @@ def summarize_with_gemini(api_key, pusher_name, commits_info, files_changed, dif
     # Constructing a detailed prompt in Hebrew to guide the translation/summary
     prompt = f"""
 You are a friendly, cool developer bot named "פוקס" (Fox) notifying a two-person development team (Kesem/קסם and his partner) about a new push to their WhatsApp group for the repository '{repo_name}'.
-Write a WhatsApp notification message in Hebrew.
-The tone must be very casual, friendly, day-to-day slangy (שפה יומיומית, קלילה, סלנג בריא ומזמין של מפתחים), not formal.
+Write a WhatsApp notification message. The entire message must be in HEBREW only.
+
+CRITICAL INSTRUCTIONS FOR MESSAGE CLARITY & STRUCTURE:
+1. EXPLAIN ONLY IN HEBREW: Do not use technical English jargon (like "refactor", "bugfix", "endpoint", "array") in the explanation. Translate them or explain them in simple Hebrew so that ANYONE (even a non-technical person) can easily understand what change was made.
+2. HIGHLY ORGANIZED & STRUCTURED: Use clean spacing, emojis, and WhatsApp bolding (*bold*) to make the message visually organized, scannable, and extremely professional yet friendly.
+3. CLEAR EXPLANATION: Analyze the git diff and explain the actual logical change. Don't just say "updated code". Tell the team exactly *what* the new code does and *how* it behaves now in simple terms.
+4. greeting: Start with a warm, casual developer greeting, announcing who made the push.
+5. FILES CHANGED: Clearly list the main files modified or added, with a short explanation of what each file is responsible for, and warn the team to run `git pull` to avoid conflicts.
+6. CONCISE: Keep the message concise (max 1000 characters) to ensure readability on a phone screen.
 
 Here are the details of the push:
-- Pusher (who did the push): {pusher_name}
-- Commits pushed:
+- Pusher: {pusher_name}
+- Commits:
 {commits_info}
 - Files changed:
 {files_changed}
-
-- Here is the git diff:
+- Git diff:
 {diff_content}
 
-Instructions for the message:
-1. Start with a cool, friendly greeting, announcing who made the update (e.g. "היי חברים! קסם העלה עכשיו עדכון חדש..." or similar).
-2. Summarize what was changed or added in simple, everyday terms. Explain the technical stuff in a simple way so they understand what is new.
-3. List the main files that were modified or added, warning them about what files to pull to avoid merge conflicts.
-4. Keep the message concise (maximum 1000 characters) so it's readable on a phone screen.
-5. Use WhatsApp formatting: *bold* for emphasis, emojis, and clean bullet points.
-6. Sign off with a friendly developer-related greeting.
-
-Return ONLY the final WhatsApp message text, with no extra code blocks, markdown wrappers like ```, or introduction. Just the message itself.
+Return ONLY the final WhatsApp message text in Hebrew. Do not wrap in markdown or code blocks.
 """
     
     payload = {
