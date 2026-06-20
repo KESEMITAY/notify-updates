@@ -1,0 +1,33 @@
+name: WhatsApp Push Notifier
+
+on:
+  push:
+    # Triggers on pushes to all branches. 
+    # This helps track who is working on what branch and avoid merge conflicts.
+    branches:
+      - '**'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        # fetch-depth: 0 fetches all history, which allows getting the correct diff between push states.
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    - name: Run Notifier Script
+      env:
+        GREEN_API_ID_INSTANCE: ${{ secrets.GREEN_API_ID_INSTANCE }}
+        GREEN_API_TOKEN: ${{ secrets.GREEN_API_TOKEN }}
+        GREEN_API_GROUP_ID: ${{ secrets.GREEN_API_GROUP_ID }}
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      run: |
+        python notify.py
