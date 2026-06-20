@@ -25,7 +25,7 @@ def get_git_diff(before, after):
     return run_command(['git', 'diff', before, after])
 
 def summarize_with_gemini(api_key, pusher_name, commits_info, files_changed, diff_content, repo_name):
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
     
     # Clean and limit diff content size to avoid overloading the API
     if diff_content and len(diff_content) > 6000:
