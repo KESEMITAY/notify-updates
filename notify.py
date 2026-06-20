@@ -265,6 +265,8 @@ if __name__ == "__main__":
 # Trigger Shmulik test
 # Test Andy trigger
 # Trigger formatting check
+# Trigger colon check
+
 
 
 
