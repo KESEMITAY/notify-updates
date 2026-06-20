@@ -264,6 +264,8 @@ if __name__ == "__main__":
 # Test trigger for WhatsApp notification
 # Trigger Shmulik test
 # Test Andy trigger
+# Trigger formatting check
+
 
 
 
