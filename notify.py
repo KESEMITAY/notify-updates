@@ -33,14 +33,14 @@ def summarize_with_gemini(api_key, pusher_name, commits_info, files_changed, dif
 
     # Constructing a detailed prompt in Hebrew to guide the translation/summary
     prompt = f"""
-You are a friendly, cool developer bot named "פוקס" (Fox) notifying a two-person development team (Kesem/קסם and his partner) about a new push to their WhatsApp group for the repository '{repo_name}'.
+You are a friendly, cool developer bot named "שמוליק" (Shmulik) notifying a two-person development team (קסם/Kesem and איתי/Itay) about a new push to their WhatsApp group for the repository '{repo_name}'.
 Write a WhatsApp notification message. The entire message must be in HEBREW only.
 
 CRITICAL INSTRUCTIONS FOR MESSAGE CLARITY & STRUCTURE:
-1. EXPLAIN ONLY IN HEBREW: Do not use technical English jargon (like "refactor", "bugfix", "endpoint", "array") in the explanation. Translate them or explain them in simple Hebrew so that ANYONE (even a non-technical person) can easily understand what change was made.
-2. HIGHLY ORGANIZED & STRUCTURED: Use clean spacing, emojis, and WhatsApp bolding (*bold*) to make the message visually organized, scannable, and extremely professional yet friendly.
-3. CLEAR EXPLANATION: Analyze the git diff and explain the actual logical change. Don't just say "updated code". Tell the team exactly *what* the new code does and *how* it behaves now in simple terms.
-4. greeting: Start with a warm, casual developer greeting, announcing who made the push.
+1. GREETING & PUSHER TERMINOLOGY: Start with a friendly greeting from "שמוליק", announcing that "{pusher_name} ביצע פוש חדש" (performed a new push) to '{repo_name}'. Do NOT use the words "דחף" or "לדחוף" anywhere in the message. Always use the phrasing "ביצע פוש".
+2. EXPLAIN ONLY IN HEBREW: Do not use technical English jargon (like "refactor", "bugfix", "endpoint", "array") in the explanation. Translate them or explain them in simple Hebrew so that ANYONE (even a non-technical person) can easily understand what change was made.
+3. HIGHLY ORGANIZED & STRUCTURED: Use clean spacing, emojis, and WhatsApp bolding (*bold*) to make the message visually organized, scannable, and extremely professional yet friendly.
+4. CLEAR EXPLANATION: Analyze the git diff and explain the actual logical change. Don't just say "updated code". Tell the team exactly *what* the new code does and *how* it behaves now in simple terms.
 5. FILES CHANGED: Clearly list the main files modified or added, with a short explanation of what each file is responsible for, and warn the team to run `git pull` to avoid conflicts.
 6. CONCISE: Keep the message concise (max 1000 characters) to ensure readability on a phone screen.
 
@@ -147,10 +147,14 @@ def main():
             with open(event_path, 'r', encoding='utf-8') as f:
                 event_data = json.load(f)
                 
-            pusher_name = event_data.get('pusher', {}).get('name', 'מפתח בפרויקט')
-            # Check if pusher has a display name or email username
-            if 'pusher' in event_data and 'email' in event_data['pusher']:
-                pusher_name = event_data['pusher'].get('name', pusher_name)
+            raw_pusher = event_data.get('pusher', {}).get('name', '')
+            if not raw_pusher and 'sender' in event_data:
+                raw_pusher = event_data.get('sender', {}).get('login', '')
+                
+            if raw_pusher and ("kesem" in raw_pusher.lower() or "lulu" in raw_pusher.lower()):
+                pusher_name = "קסם"
+            else:
+                pusher_name = "איתי"
             
             before_sha = event_data.get('before', '')
             after_sha = event_data.get('after', '')
@@ -175,7 +179,11 @@ def main():
             print(f"⚠️ Error parsing GITHUB_EVENT_PATH: {e}")
     else:
         print("⚠️ No GITHUB_EVENT_PATH found. Running in local test/fallback mode.")
-        pusher_name = run_command(['git', 'log', '-1', '--format=%an'])
+        raw_pusher = run_command(['git', 'log', '-1', '--format=%an'])
+        if raw_pusher and ("kesem" in raw_pusher.lower() or "lulu" in raw_pusher.lower()):
+            pusher_name = "קסם"
+        else:
+            pusher_name = "איתי"
         before_sha = "HEAD~1"
         after_sha = "HEAD"
         commits_info = f"- {run_command(['git', 'log', '-1', '--format=%B'])}\n"
@@ -206,8 +214,7 @@ def main():
     if not whatsapp_message:
         print("📝 Using template fallback for WhatsApp message...")
         whatsapp_message = (
-            f"🔔 *עדכון חדש בגיטהאב ב-{repo_name}!*\n\n"
-            f"*מאת:* {pusher_name}\n\n"
+            f"🔔 *שמוליק מעדכן: {pusher_name} ביצע פוש חדש ב-{repo_name}!*\n\n"
             f"*הקומיטים שנכנסו:*\n{commits_info}\n"
             f"*קבצים ששונו/נוספו:*\n{files_changed_str}\n\n"
             f"⚠️ מומלץ לעשות `git pull` לפני שממשיכים לעבוד כדי למנוע התנגשויות!"
