@@ -267,6 +267,8 @@ if __name__ == "__main__":
 # Test Andy trigger
 # Trigger formatting check
 # Trigger colon check
+# Trigger tone check
+
 
 
 
