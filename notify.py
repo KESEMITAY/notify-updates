@@ -83,7 +83,7 @@ Return ONLY the final WhatsApp message text in Hebrew. Do not wrap in markdown o
             }
         ],
         "generationConfig": {
-            "maxOutputTokens": 1000,
+            "maxOutputTokens": 4000,
             "temperature": 0.7
         }
     }
