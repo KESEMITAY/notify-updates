@@ -165,20 +165,29 @@ def main():
             with open(event_path, 'r', encoding='utf-8') as f:
                 event_data = json.load(f)
                 
-            raw_pusher = event_data.get('pusher', {}).get('name', '')
-            if not raw_pusher and 'sender' in event_data:
-                raw_pusher = event_data.get('sender', {}).get('login', '')
-                
-            if raw_pusher and ("kesem" in raw_pusher.lower() or "lulu" in raw_pusher.lower()):
+            before_sha = event_data.get('before', '')
+            after_sha = event_data.get('after', '')
+            commits = event_data.get('commits', [])
+            print(f"Found {len(commits)} commits in this push.")
+
+            # Resolve who actually made the push based on the latest commit author
+            commit_author = ""
+            if commits:
+                latest_commit = commits[-1]
+                commit_author = latest_commit.get('author', {}).get('name', '')
+                if not commit_author:
+                    commit_author = latest_commit.get('committer', {}).get('name', '')
+            
+            # Fallback to pusher name
+            if not commit_author:
+                commit_author = event_data.get('pusher', {}).get('name', '')
+                if not commit_author and 'sender' in event_data:
+                    commit_author = event_data.get('sender', {}).get('login', '')
+
+            if commit_author and ("kesem" in commit_author.lower() or "lulu" in commit_author.lower() or "kesemitay" in commit_author.lower()):
                 pusher_name = "קסם"
             else:
                 pusher_name = "איתי"
-            
-            before_sha = event_data.get('before', '')
-            after_sha = event_data.get('after', '')
-            
-            commits = event_data.get('commits', [])
-            print(f"Found {len(commits)} commits in this push.")
             
             for c in commits:
                 author = c.get('author', {}).get('name', '')
